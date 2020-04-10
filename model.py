@@ -117,3 +117,11 @@ def tags_add():
     post4.tags.append(tag2)
 
     session.commit()
+
+
+if __name__ == '__main__':
+    # создаем таблицу
+    Base.metadata.create_all(engine)
+    # вызов функций добавления новых данных:
+    create_data()
+    tags_add()

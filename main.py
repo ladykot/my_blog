@@ -1,28 +1,22 @@
-""" Модуль, предназначенный для подключения к базе, 
-создания сессии, добавления новых данных и их дальнейших изменений, 
-добавления тегов и сохранения изменений в базе.
+""" Модуль предназначен для запроса постов пользователя по 2-м тегам
 """
 
-
-from model import create_data, tags_add
-from model import Base, Post, User, Tag, engine, Session
+from model import Post, User, Tag, Session
 
 
-def get_user_post(username, tagname):
+def get_user_post(username, tags):
     """ Функция запрашивает посты 
     любого пользователя с конкретным тегом
     """
     session = Session()
-    print(session.query(Post).join(User).filter(User.username == username).filter(Tag.name == tagname).all())
+    for tag in tags:
+        print(session.query(Post).join(User).
+              filter(User.username == username).
+              filter(Tag.name == tag).all())
 
 
 if __name__ == '__main__':
-    # создаем таблицу
-    Base.metadata.create_all(engine)
-    # вызов функций добавления новых данных:
-    create_data()
-    tags_add()
-    username = input("Имя пользователя:")
-    tagname = input("Тег поста:")
-    # вызов функции запроса постов пользователя
-    get_user_post(username, tagname)
+    username = input("Введите имя пользователя:")
+    tag1, tag2 = input("Выберете два любых тега:").split()
+    tags = [tag1, tag2]
+    get_user_post(username, tags)
